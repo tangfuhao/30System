@@ -1,0 +1,157 @@
+[FORMAT "WCOFF"]
+[INSTRSET "i486p"]
+[OPTIMIZE 1]
+[OPTION 1]
+[BITS 32]
+	EXTERN	_io_hlt
+	EXTERN	_io_load_eflags
+	EXTERN	_io_cli
+	EXTERN	_io_out8
+[FILE "bootpack.c"]
+[SECTION .text]
+	GLOBAL	_HariMain
+_HariMain:
+	PUSH	EBP
+	MOV	EBP,ESP
+	SUB	ESP,8
+	CALL	_init_palette
+	MOV	DWORD [-4+EBP],655360
+L2:
+	CMP	DWORD [-4+EBP],720894
+	JLE	L5
+	JMP	L6
+L5:
+	MOV	EAX,DWORD [-4+EBP]
+	MOV	DWORD [-8+EBP],EAX
+	MOV	EDX,DWORD [-8+EBP]
+	MOV	AL,BYTE [-4+EBP]
+	AND	EAX,15
+	MOV	BYTE [EDX],AL
+	LEA	EAX,DWORD [-4+EBP]
+	INC	DWORD [EAX]
+	JMP	L2
+L6:
+	CALL	_io_hlt
+	JMP	L6
+[SECTION .data]
+_table_rgb.0:
+	DB	0
+	DB	0
+	DB	0
+	DB	-1
+	DB	0
+	DB	0
+	DB	0
+	DB	-1
+	DB	0
+	DB	-1
+	DB	-1
+	DB	0
+	DB	0
+	DB	0
+	DB	-1
+	DB	-1
+	DB	0
+	DB	-1
+	DB	0
+	DB	-1
+	DB	-1
+	DB	-1
+	DB	-1
+	DB	-1
+	DB	-58
+	DB	-58
+	DB	-58
+	DB	-124
+	DB	0
+	DB	0
+	DB	0
+	DB	-124
+	DB	0
+	DB	-124
+	DB	-124
+	DB	0
+	DB	0
+	DB	0
+	DB	-124
+	DB	-124
+	DB	0
+	DB	-124
+	DB	0
+	DB	-124
+	DB	-124
+	DB	-124
+	DB	-124
+	DB	-124
+[SECTION .text]
+	GLOBAL	_init_palette
+_init_palette:
+	PUSH	EBP
+	MOV	EBP,ESP
+	SUB	ESP,8
+	SUB	ESP,4
+	PUSH	_table_rgb.0
+	PUSH	15
+	PUSH	0
+	CALL	_set_palette
+	ADD	ESP,16
+	LEAVE
+	RET
+	GLOBAL	_set_palette
+_set_palette:
+	PUSH	EBP
+	MOV	EBP,ESP
+	SUB	ESP,8
+	CALL	_io_load_eflags
+	MOV	DWORD [-8+EBP],EAX
+	CALL	_io_cli
+	SUB	ESP,8
+	PUSH	DWORD [8+EBP]
+	PUSH	969
+	CALL	_io_out8
+	ADD	ESP,16
+	MOV	EAX,DWORD [8+EBP]
+	MOV	DWORD [-4+EBP],EAX
+L9:
+	MOV	EAX,DWORD [-4+EBP]
+	CMP	EAX,DWORD [12+EBP]
+	JLE	L12
+	JMP	L8
+L12:
+	SUB	ESP,8
+	MOV	EAX,DWORD [16+EBP]
+	MOV	AL,BYTE [EAX]
+	SHR	AL,2
+	AND	EAX,255
+	PUSH	EAX
+	PUSH	969
+	CALL	_io_out8
+	ADD	ESP,16
+	SUB	ESP,8
+	MOV	EAX,DWORD [16+EBP]
+	INC	EAX
+	MOV	AL,BYTE [EAX]
+	SHR	AL,2
+	AND	EAX,255
+	PUSH	EAX
+	PUSH	969
+	CALL	_io_out8
+	ADD	ESP,16
+	SUB	ESP,8
+	MOV	EAX,DWORD [16+EBP]
+	ADD	EAX,2
+	MOV	AL,BYTE [EAX]
+	SHR	AL,2
+	AND	EAX,255
+	PUSH	EAX
+	PUSH	969
+	CALL	_io_out8
+	ADD	ESP,16
+	LEA	EAX,DWORD [16+EBP]
+	ADD	DWORD [EAX],3
+	LEA	EAX,DWORD [-4+EBP]
+	INC	DWORD [EAX]
+	JMP	L9
+L8:
+	LEAVE
+	RET

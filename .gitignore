@@ -1,0 +1,9 @@
+tolset/helloos/*.bin
+tolset/helloos/*.lst
+tolset/helloos/*.gas
+tolset/helloos/*.obj
+tolset/helloos/*.map
+tolset/helloos/*.bim
+tolset/helloos/*.hrb
+tolset/helloos/*.sys
+tolset/helloos/*.img

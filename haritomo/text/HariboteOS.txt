@@ -1,0 +1,7 @@
+【OS名】HariboteOS
+【作者】K (「30日でできる！ OS自作入門」の著者)
+【Web 】http://hrb.osask.jp/wiki/?advance
+【特徴】
+　「30日でできる！ OS自作入門」で作るＯＳ
+【一言】
+　全てはここから始まった！！

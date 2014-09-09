@@ -1,0 +1,11 @@
+【OS名】BayOS
+【作者】bayside
+【Web 】http://caffe-latte.sourceforge.jp/pukiwiki/index.php?BayOS
+【特徴】
+　・はりぼてOSを参考に、C++でフルスクラッチで書き直したOS
+　・自作GUI「BayGUI」搭載
+　　- MonaOSというOSで動作していたものを移植
+　　- MacOS風GUIデザイン
+　・「psコマンド」でプロセス一覧表示可能
+　・noiz2bgなどのメガデモを移植
+　・多色対応・壁紙対応

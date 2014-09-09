@@ -1,0 +1,17 @@
+format:
+	/* このセクションでリンクの方針を記述 */
+	code(align:1, logic:0x48,      file:0x48);
+	data(align:4, logic:stack_end, file:code_end);
+
+file:
+	/* このセクションでコマンドラインに書ききれなかった
+		.ojbファイル、.libファイルを記載 */
+	f:/osalib/gg00libc.lib;
+	f:/osalib/golibc.lib;
+	f:/osalib/sysgg00.lib;
+	f:/osalib/bangint3.obj;
+
+label:
+	/* 必ずリンクしなければいけないラベルを指定 */
+	/* エントリポイントを指定すればいいと思ってください */
+	_OsaskMain;

@@ -1,0 +1,9 @@
+【OS名】seriboteOS
+【作者】uchan
+【Web 】http://nos.zisaku.com/index.php?seriboteOS
+【特徴】
+　・RS-232機能を搭載！
+　　- 好きなフォントで電光掲示板に表示
+　　- ＬＣＤ表示機にも使用可能
+【一言】
+　オシロスコープも製作予定！

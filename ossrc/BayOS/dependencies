@@ -1,0 +1,55 @@
+bayos.o: bayos.cpp bayos.h sys/List.h system/descriptor.h \
+  system/ihandler.h driver/pic.h driver/dtk5s.h driver/file.h \
+  system/memory.h system/scheduler.h system/sheet.h system/console.h \
+  driver/beep.h driver/clock.h driver/keyboard.h driver/mouse.h \
+  driver/timer.h
+console.o: system/console.cpp system/../bayos.h system/../sys/List.h \
+  system/../system/descriptor.h system/../system/ihandler.h \
+  system/../driver/pic.h system/../driver/dtk5s.h system/../driver/file.h \
+  system/../system/memory.h system/../system/scheduler.h \
+  system/../system/sheet.h system/../system/console.h \
+  system/../driver/beep.h system/../driver/clock.h \
+  system/../driver/keyboard.h system/../driver/mouse.h \
+  system/../driver/timer.h system/../sys/font_hankaku.h
+descriptor.o: system/descriptor.cpp system/../bayos.h \
+  system/../sys/List.h system/../system/descriptor.h \
+  system/../system/ihandler.h system/../driver/pic.h \
+  system/../driver/dtk5s.h system/../driver/file.h \
+  system/../system/memory.h system/../system/scheduler.h \
+  system/../system/sheet.h system/../system/console.h \
+  system/../driver/beep.h system/../driver/clock.h \
+  system/../driver/keyboard.h system/../driver/mouse.h \
+  system/../driver/timer.h
+ihandler.o: system/ihandler.cpp system/../bayos.h system/../sys/List.h \
+  system/../system/descriptor.h system/../system/ihandler.h \
+  system/../driver/pic.h system/../driver/dtk5s.h system/../driver/file.h \
+  system/../system/memory.h system/../system/scheduler.h \
+  system/../system/sheet.h system/../system/console.h \
+  system/../driver/beep.h system/../driver/clock.h \
+  system/../driver/keyboard.h system/../driver/mouse.h \
+  system/../driver/timer.h system/../apilib/syscall.h \
+  system/../apilib/../sys/types.h
+memory.o: system/memory.cpp system/../bayos.h system/../sys/List.h \
+  system/../system/descriptor.h system/../system/ihandler.h \
+  system/../driver/pic.h system/../driver/dtk5s.h system/../driver/file.h \
+  system/../system/memory.h system/../system/scheduler.h \
+  system/../system/sheet.h system/../system/console.h \
+  system/../driver/beep.h system/../driver/clock.h \
+  system/../driver/keyboard.h system/../driver/mouse.h \
+  system/../driver/timer.h
+scheduler.o: system/scheduler.cpp system/../bayos.h system/../sys/List.h \
+  system/../system/descriptor.h system/../system/ihandler.h \
+  system/../driver/pic.h system/../driver/dtk5s.h system/../driver/file.h \
+  system/../system/memory.h system/../system/scheduler.h \
+  system/../system/sheet.h system/../system/console.h \
+  system/../driver/beep.h system/../driver/clock.h \
+  system/../driver/keyboard.h system/../driver/mouse.h \
+  system/../driver/timer.h
+sheet.o: system/sheet.cpp system/../bayos.h system/../sys/List.h \
+  system/../system/descriptor.h system/../system/ihandler.h \
+  system/../driver/pic.h system/../driver/dtk5s.h system/../driver/file.h \
+  system/../system/memory.h system/../system/scheduler.h \
+  system/../system/sheet.h system/../system/console.h \
+  system/../driver/beep.h system/../driver/clock.h \
+  system/../driver/keyboard.h system/../driver/mouse.h \
+  system/../driver/timer.h system/../sys/font_hankaku.h
