@@ -28,14 +28,14 @@ ipl10.bin : ipl10.nas Makefile
 asmhead.bin : asmhead.nas Makefile
 	$(NASK) asmhead.nas asmhead.bin asmhead.lst
 
-bootpack.gas : bootpack.c Makefile
-	$(CC1) -o bootpack.gas bootpack.c
+# bootpack.gas : bootpack.c Makefile
+# 	$(CC1) -o bootpack.gas bootpack.c -I ..\z_tools\win32
 
-bootpack.nas : bootpack.gas Makefile
-	$(GAS2NASK) bootpack.gas bootpack.nas
+# bootpack.nas : bootpack.gas Makefile
+# 	$(GAS2NASK) bootpack.gas bootpack.nas
 
-bootpack.obj : bootpack.nas Makefile
-	$(NASK) bootpack.nas bootpack.obj bootpack.lst
+# bootpack.obj : bootpack.nas Makefile
+# 	$(NASK) bootpack.nas bootpack.obj bootpack.lst
 
 naskfunc.obj : naskfunc.nas Makefile
 	$(NASK) naskfunc.nas naskfunc.obj naskfunc.lst
@@ -65,10 +65,10 @@ haribote.img : ipl10.bin haribote.sys Makefile
 
 
 %.gas : %.c Makefile
-	$(CC1) -o $*.gas $*.c
+	$(CC1) -o $*.gas $*.c -I ..\z_tools\win32
 
 %.nas : %.gas Makefile
-	$(GAS2NASK) $*.gas $*.nas
+	$(GAS2NASK) $*.gas $*.nas 
 
 %.obj : %.nas Makefile
 	$(NASK) $*.nas $*.obj $*.lst

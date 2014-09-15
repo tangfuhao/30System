@@ -1,59 +1,67 @@
-/* ���荞�݊֌W */
+/* Š„‚èž‚ÝŠÖŒW */
 
 #include "bootpack.h"
+#include <stdio.h>
+
+#define PORT_KEYDAT		0x0060
+struct KEYBUF keybuf ;
 
 void init_pic(void)
-/* PIC�̏����� */
+/* PIC‚Ì‰Šú‰» */
 {
-	io_out8(PIC0_IMR,  0xff  ); /* �S�Ă̊��荞�݂��󂯕t���Ȃ� */
-	io_out8(PIC1_IMR,  0xff  ); /* �S�Ă̊��荞�݂��󂯕t���Ȃ� */
+	io_out8(PIC0_IMR,  0xff  ); /* ‘S‚Ä‚ÌŠ„‚èž‚Ý‚ðŽó‚¯•t‚¯‚È‚¢ */
+	io_out8(PIC1_IMR,  0xff  ); /* ‘S‚Ä‚ÌŠ„‚èž‚Ý‚ðŽó‚¯•t‚¯‚È‚¢ */
 
-	io_out8(PIC0_ICW1, 0x11  ); /* �G�b�W�g���K���[�h */
-	io_out8(PIC0_ICW2, 0x20  ); /* IRQ0-7�́AINT20-27�Ŏ󂯂� */
-	io_out8(PIC0_ICW3, 1 << 2); /* PIC1��IRQ2�ɂĐڑ� */
-	io_out8(PIC0_ICW4, 0x01  ); /* �m���o�b�t�@���[�h */
+	io_out8(PIC0_ICW1, 0x11  ); /* ƒGƒbƒWƒgƒŠƒKƒ‚[ƒh */
+	io_out8(PIC0_ICW2, 0x20  ); /* IRQ0-7‚ÍAINT20-27‚ÅŽó‚¯‚é */
+	io_out8(PIC0_ICW3, 1 << 2); /* PIC1‚ÍIRQ2‚É‚ÄÚ‘± */
+	io_out8(PIC0_ICW4, 0x01  ); /* ƒmƒ“ƒoƒbƒtƒ@ƒ‚[ƒh */
 
-	io_out8(PIC1_ICW1, 0x11  ); /* �G�b�W�g���K���[�h */
-	io_out8(PIC1_ICW2, 0x28  ); /* IRQ8-15�́AINT28-2f�Ŏ󂯂� */
-	io_out8(PIC1_ICW3, 2     ); /* PIC1��IRQ2�ɂĐڑ� */
-	io_out8(PIC1_ICW4, 0x01  ); /* �m���o�b�t�@���[�h */
+	io_out8(PIC1_ICW1, 0x11  ); /* ƒGƒbƒWƒgƒŠƒKƒ‚[ƒh */
+	io_out8(PIC1_ICW2, 0x28  ); /* IRQ8-15‚ÍAINT28-2f‚ÅŽó‚¯‚é */
+	io_out8(PIC1_ICW3, 2     ); /* PIC1‚ÍIRQ2‚É‚ÄÚ‘± */
+	io_out8(PIC1_ICW4, 0x01  ); /* ƒmƒ“ƒoƒbƒtƒ@ƒ‚[ƒh */
 
-	io_out8(PIC0_IMR,  0xfb  ); /* 11111011 PIC1�ȊO�͑S�ċ֎~ */
-	io_out8(PIC1_IMR,  0xff  ); /* 11111111 �S�Ă̊��荞�݂��󂯕t���Ȃ� */
+	io_out8(PIC0_IMR,  0xfb  ); /* 11111011 PIC1ˆÈŠO‚Í‘S‚Ä‹ÖŽ~ */
+	io_out8(PIC1_IMR,  0xff  ); /* 11111111 ‘S‚Ä‚ÌŠ„‚èž‚Ý‚ðŽó‚¯•t‚¯‚È‚¢ */
 
 	return;
 }
 
 void inthandler21(int *esp)
-/* PS/2�L�[�{�[�h����̊��荞�� */
+/* PS/2ƒL[ƒ{[ƒh‚©‚ç‚ÌŠ„‚èž‚Ý */
 {
-	struct BOOTINFO *binfo = (struct BOOTINFO *) ADR_BOOTINFO;
-	boxfill8(binfo->vram, binfo->scrnx, COL8_000000, 0, 0, 32 * 8 - 1, 15);
-	putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, COL8_FFFFFF, "INT 21 (IRQ-1) : PS/2 keyboard");
-	for (;;) {
-		io_hlt();
+	unsigned char data;
+	io_out8(PIC0_OCW2,0x61);	/* 通知IPC*IRQ-01 已经受理完毕 */
+	data = io_in8(PORT_KEYDAT);
+
+	if (keybuf.flag == 0)
+	{
+		keybuf.data = data;
+		keybuf.flag = 1;
 	}
+	
+	return ;
 }
 
 void inthandler2c(int *esp)
-/* PS/2�}�E�X����̊��荞�� */
+/* PS/2ƒ}ƒEƒX‚©‚ç‚ÌŠ„‚èž‚Ý */
 {
 	struct BOOTINFO *binfo = (struct BOOTINFO *) ADR_BOOTINFO;
 	boxfill8(binfo->vram, binfo->scrnx, COL8_000000, 0, 0, 32 * 8 - 1, 15);
 	putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, COL8_FFFFFF, "INT 2C (IRQ-12) : PS/2 mouse");
-	for (;;) {
-		io_hlt();
-	}
+
+	return ;
 }
 
 void inthandler27(int *esp)
-/* PIC0����̕s���S���荞�ݑ΍� */
-/* Athlon64X2�@�Ȃǂł̓`�b�v�Z�b�g�̓s���ɂ��PIC�̏��������ɂ��̊��荞�݂�1�x���������� */
-/* ���̊��荞�ݏ����֐��́A���̊��荞�݂ɑ΂��ĉ������Ȃ��ł��߂��� */
-/* �Ȃ��������Ȃ��Ă����́H
-	��  ���̊��荞�݂�PIC���������̓d�C�I�ȃm�C�Y�ɂ���Ĕ����������̂Ȃ̂ŁA
-		�܂��߂ɉ����������Ă��K�v���Ȃ��B									*/
+/* PIC0‚©‚ç‚Ì•sŠ®‘SŠ„‚èž‚Ý‘Îô */
+/* Athlon64X2‹@‚È‚Ç‚Å‚Íƒ`ƒbƒvƒZƒbƒg‚Ì“s‡‚É‚æ‚èPIC‚Ì‰Šú‰»Žž‚É‚±‚ÌŠ„‚èž‚Ý‚ª1“x‚¾‚¯‚¨‚±‚é */
+/* ‚±‚ÌŠ„‚èž‚Ýˆ—ŠÖ”‚ÍA‚»‚ÌŠ„‚èž‚Ý‚É‘Î‚µ‚Ä‰½‚à‚µ‚È‚¢‚Å‚â‚è‰ß‚²‚· */
+/* ‚È‚º‰½‚à‚µ‚È‚­‚Ä‚¢‚¢‚ÌH
+	¨  ‚±‚ÌŠ„‚èž‚Ý‚ÍPIC‰Šú‰»Žž‚Ì“d‹C“I‚ÈƒmƒCƒY‚É‚æ‚Á‚Ä”­¶‚µ‚½‚à‚Ì‚È‚Ì‚ÅA
+		‚Ü‚¶‚ß‚É‰½‚©ˆ—‚µ‚Ä‚â‚é•K—v‚ª‚È‚¢B									*/
 {
-	io_out8(PIC0_OCW2, 0x67); /* IRQ-07��t������PIC�ɒʒm(7-1�Q��) */
+	io_out8(PIC0_OCW2, 0x67); /* IRQ-07Žó•tŠ®—¹‚ðPIC‚É’Ê’m(7-1ŽQÆ) */
 	return;
 }
