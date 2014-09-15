@@ -35,10 +35,15 @@ void inthandler21(int *esp)
 	io_out8(PIC0_OCW2,0x61);	/* 通知IPC*IRQ-01 已经受理完毕 */
 	data = io_in8(PORT_KEYDAT);
 
-	if (keybuf.flag == 0)
+	if (keybuf.len < 32)
 	{
-		keybuf.data = data;
-		keybuf.flag = 1;
+		keybuf.data[keybuf.next_w] = data;
+		keybuf.next_w ++;
+		keybuf.len ++;
+		if (keybuf.next_w == 32)
+		{
+			keybuf.next_w = 0;
+		}
 	}
 	
 	return ;

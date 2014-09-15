@@ -29,17 +29,18 @@ void HariMain(void)
 
 	for (;;) {
 		io_cli();
-		if (keybuf.flag == 0)
+		if (keybuf.len == 0)
 		{
 			io_stihlt();
 		}else{
-
-			unsigned char i = keybuf.data;
-			keybuf.flag = 0;
+			unsigned char i = keybuf.data[keybuf.next_r];
+			keybuf.next_r ++;
+			keybuf.len --;
+			if (keybuf.next_r == 32) keybuf.next_r = 0;
 			io_sti();
+
 			unsigned char ss[4];
 			sprintf(ss,"%02X",i);
-			// boxfill8(binfo->vram, binfo->scrnx, COL8_000000, 0, 0, 32 * 8 - 1, 15);
 			putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, COL8_FFFFFF, ss);
 		}
 	}

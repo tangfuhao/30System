@@ -97,7 +97,8 @@ void inthandler2c(int *esp);
 
 struct KEYBUF
 {
-	unsigned char data,flag;
+	unsigned char data[32];
+	int next_w,next_r,len;
 };
 
 
