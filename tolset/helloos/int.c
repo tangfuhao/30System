@@ -4,7 +4,8 @@
 #include <stdio.h>
 
 #define PORT_KEYDAT		0x0060
-struct KEYBUF keybuf ;
+extern struct FIFO8 keyfifo;
+extern struct FIFO8 mousefifo;
 
 void init_pic(void)
 /* PIC‚Ì‰Šú‰» */
@@ -34,17 +35,7 @@ void inthandler21(int *esp)
 	unsigned char data;
 	io_out8(PIC0_OCW2,0x61);	/* 通知IPC*IRQ-01 已经受理完毕 */
 	data = io_in8(PORT_KEYDAT);
-
-	if (keybuf.len < 32)
-	{
-		keybuf.data[keybuf.next_w] = data;
-		keybuf.next_w ++;
-		keybuf.len ++;
-		if (keybuf.next_w == 32)
-		{
-			keybuf.next_w = 0;
-		}
-	}
+	fifo8_put(&keyfifo,data);
 	
 	return ;
 }
@@ -52,9 +43,11 @@ void inthandler21(int *esp)
 void inthandler2c(int *esp)
 /* PS/2ƒ}ƒEƒX‚©‚ç‚ÌŠ„‚èž‚Ý */
 {
-	struct BOOTINFO *binfo = (struct BOOTINFO *) ADR_BOOTINFO;
-	boxfill8(binfo->vram, binfo->scrnx, COL8_000000, 0, 0, 32 * 8 - 1, 15);
-	putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, COL8_FFFFFF, "INT 2C (IRQ-12) : PS/2 mouse");
+	unsigned char data;
+	io_out8(PIC1_OCW2,0x64);	/* 通知IPC1 IRQ-12 已经受理完毕 */
+	io_out8(PIC0_OCW2,0x62);	/* 通知IPC0 IRQ-02 已经受理完毕 */
+	data = io_in8(PORT_KEYDAT);
+	fifo8_put(&mousefifo,data);
 
 	return ;
 }
